@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+               xmlns:s="library://ns.adobe.com/flex/spark"
+               xmlns:mx="library://ns.adobe.com/flex/mx"
+			   creationComplete="{fillTree(event)}">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+		import flash.display.MovieClip;
+		import flash.events.Event;
+		import flash.events.MouseEvent;
+		import flash.utils.Dictionary;
+		import mx.controls.Tree;
+		import turbosqel.analizer.Analize;
+		import turbosqel.analizer.DynamicType;
+		import turbosqel.analizer.SimpleType;
+		import turbosqel.analizer.ValueType;
+		import turbosqel.console.Console;
+		import turbosqel.console.ConsoleWindow;
+		import turbosqel.utils.UArray;
+		
+		
+		
+		
+		public function fillTree(e:Event):void {
+			
+			var dic:Dictionary = new Dictionary();
+			dic[this] = 123;
+			dic[Tree] = "some string";
+			
+			objectDisplay.dataProvider = Analize.parse("test" , {tree:objectDisplay , func:fillTree  , dictionary:dic , mc:new MovieClip,  event:new MouseEvent("asd")} ).analize;
+		}
+			
+		]]>
+	</fx:Script>
+	
+	<mx:Tree id="objectDisplay" labelField="label" left="0" right="0" top="0" bottom="0" ></mx:Tree>
+	
+</s:Application>
