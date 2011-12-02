@@ -3,12 +3,28 @@ package turbosqel.analizer{
 	
 	import flash.utils.getQualifiedClassName;
 	
-	import turbosqel.console.Console;
 	import turbosqel.data.LVar;
 	import turbosqel.events.SoftEventDispatcher;
 	import turbosqel.utils.UArray;
 	import turbosqel.utils.UObject;
 
+	
+	
+	/**
+	 * ...
+	 * @author Gerard Sławiński || turbosqel
+	 * 
+	 * 
+	 * Analize class for parse and read Objects params , functions , accessorss .
+	 * 
+	 * to quick use :
+	 * var an:Analize = Analize.parse("nameOfAnalize" , object);
+	 * 
+	 * tree.dataProvider = an.analize;
+	 * 
+	 * 
+	 */
+	
 	public class Analize extends SoftEventDispatcher implements IAnalizeParent {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,14 +32,30 @@ package turbosqel.analizer{
 		
 		// <-------------------------- GLOBAL INDEX
 		
+		/// array with Analize objects
 		internal static var analizeIndex:Array = new Array();
+		
+		/**
+		 * add analize to index object
+		 * @param	analize
+		 */
 		internal static function addAnalize(analize:Analize):void {
 			analizeIndex.push(analize);
 		};
+		
+		/**
+		 * remove analize from index array
+		 * @param	analize
+		 */
 		internal static function removeAnalize(analize:Analize):void {
 			UArray.searchAndSlice(analizeIndex , analize);
 		};
 		
+		/**
+		 * search for analize by name
+		 * @param	name		analize name
+		 * @return				Analize or null;
+		 */
 		public static function getByName(name:String):Analize {
 			return UArray.searchValues(analizeIndex , "name" , name);
 		};
@@ -33,8 +65,14 @@ package turbosqel.analizer{
 		
 		// <-------------------------- MAIN STATIC PARSE FUNCTION
 		
-		
-		public static function parse(name:String , object:*):Analize {
+		/**
+		 * Function to create Analize . Tree style informations return Analize.analize param , and each
+		 * child is IAnalize object . Structure works with Flex Tree component .
+		 * @param	name		analize name , support for searching
+		 * @param	object		object to analize
+		 * @return				new Analize
+		 */
+		public static function parse(name:String , object:Object):Analize {
 			return new Analize(name , object);
 		};
 		
@@ -44,15 +82,21 @@ package turbosqel.analizer{
 		
 		// <-------------------------- STATIC PARAMS
 		
-		
+		/// show functions in list
 		public static var showFunctions:Boolean = true;
+		/// label string max length
 		public static var representLength:int = 100;
 		
-		
+		/// prefix for ResourceManage .
 		public static const PREFIX:String = "analize.";
 		
+		
+		// <--------------------------  VALUE TYPES
+		
+		/// null value;
 		public static const NULL:String = "null";
 		
+		/// simple nonexpandable types :
 		public static const STRING:String = "String";
 		public static const BOOLEAN:String = "Boolean";
 		public static const NUMBER:String = "Number";
@@ -60,11 +104,13 @@ package turbosqel.analizer{
 		public static const UINT:String = "uint";
 		public static const FUNCTION:String = "Function";
 		
+		
+		/// simple types with children :
 		public static const OBJECT:String = "Object";
 		public static const ARRAY:String = "Array";
 		
-		
-		internal static const VIOD:int = 0;
+		/// int code types 
+		internal static const VOID:int = 0;
 		internal static const DELEGATE:int = 1;
 		internal static const SIMPLE:int = 2;
 		internal static const DYNAMIC:int = 3;
@@ -76,12 +122,19 @@ package turbosqel.analizer{
 		
 		// <-------------------------- TYPE FUNCTIONS
 		
+		
+		/**
+		 * return int code of type .
+		 * @param	value				object or String with class name / alias
+		 * @param	getClassName		if true , function read "value" as object , if false - expect String with class name/alias
+		 * @return						int code
+		 */
 		internal static function typeId(value:* , getClassName:Boolean = true):int {
 			
 			switch(getClassName ? getQualifiedClassName(value):String(value)) {
 				// null
 				case NULL:
-					return VIOD;
+					return VOID;
 				// simple
 				case BOOLEAN :
 					return SIMPLE;
@@ -107,7 +160,11 @@ package turbosqel.analizer{
 			};
 		};
 		
-		
+		/**
+		 * return type by int code
+		 * @param	id		int code
+		 * @return			type name
+		 */
 		internal static function typeName(id:int):String {
 			switch(id) {
 				case NULL :
@@ -122,11 +179,20 @@ package turbosqel.analizer{
 			return "complex";
 		};
 		
-		
-		
+		////////////////////////////////
+		////////////////////////////////
+		////////////////////////////////
+		/**
+		 * create child IAnalize object
+		 * @param	parent			parent object
+		 * @param	target			target value
+		 * @param	access			access type - AnalizeType.READ , AnalizeType.WRITE , AnalizeType.READWRITE
+		 * @param	forceType		name/alias of value
+		 * @return					child IAnalize object
+		 */
 		internal static function getType(parent:IAnalizeParent , target:LVar , access:String = null , forceType:String = null ):IAnalize {
 			switch(typeId((forceType ? forceType : target.value ), !Boolean(forceType) )) {
-				case VIOD:
+				case VOID:
 					return new NullType(parent , target , access , forceType );
 				case DELEGATE :
 					return new FunctionType(parent , target , access , forceType);
@@ -137,34 +203,53 @@ package turbosqel.analizer{
 				case COMPLEX :
 					return new ComplexType(parent , target , access , forceType );
 			}
-			Console.ThrowError("Analize.getType:" , new Error("unknown target type"));
+			var e:Error = new Error("unknown target type");
+			trace("Analize.getType:" , e , e.getStackTrace());
 			return new NullType(parent , target);
 		}
-		
-		
-		
-		
-		
-		
-		
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		// <-------------------------- LABEL FUNCTION
 		
-		public static var labelFunction:Function = normalLabel;
+		/// label maker function . To create own labelFunction , set here function(target:IAnalize):String;
+		/// WARNING : check customObjectLabel function to see where You should use try block .
+		/// values can have write-only or read-only modes or return null
+		public static var objectLabel:Function = customObjectLabel;
+		/// label maker function for Functions
+		public static var functionLabel:Function = customFunctionLabel;
 		
+		/**
+		 * create label for IAnalize object
+		 * @param	target		target analize
+		 * @return				serialized by function string
+		 */
 		internal static function makeLabel(target:IAnalize):String {
-			return labelFunction(target);
+			return objectLabel(target);
+		};
+		
+		/**
+		 * create label for FunctionType IAnalize
+		 * @param	target		target FunctionType
+		 * @return				formated string;
+		 */
+		internal static function makeFunctionLabel(target:FunctionType):String {
+			return functionLabel(target);
 		};
 		
 		
-		protected static function normalLabel(target:IAnalize):String {
+		
+		/**
+		 * custom label maker
+		 * @param	target		analize object
+		 * @return				serialized string
+		 */
+		protected static function customObjectLabel(target:IAnalize):String {
 			try {
 				var represent:String = String(target.target);
 			} catch (e:Error) {
-				Console.ThrowError("Analize.makeLabel error " ,e);
+				trace("Analize.makeLabel error " , e , e.getStackTrace());
 				represent = " cannot parse this value "
 			}
 			represent = represent.length > Analize.representLength ? represent.substr(0, Analize.representLength) : represent;
@@ -172,7 +257,18 @@ package turbosqel.analizer{
 				return target.name + "[" + target.type + "] ";
 			}
 			return  target.name+ "[" + target.type + "] " +" = " + represent;
-		}
+		};
+		
+		
+		
+		/**
+		 * custom label creator for functions
+		 * @param	target
+		 * @return
+		 */
+		protected static function customFunctionLabel(target:FunctionType):String {
+			return "[" + target.type + "] " + target.name + target.paramsInfo;
+		};
 		
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,60 +278,117 @@ package turbosqel.analizer{
 		
 		// <---------------- GETTERS
 		
+		/**
+		 * interface function , child read root Analize from parent IAnalize
+		 */
+		public function get root():Analize {
+			return this;
+		};
+		
+		/**
+		 * label getter . To create own labels check labelFunction param;
+		 */
 		public function get label():String {
 			return name + ":[Analize]";
-		}
+		};
 		
-		public function get type():String {
-			return typeName(contentType);
-		}
 		
+		/**
+		 * analize name
+		 */
 		public function get name():String {
 			return _name;
 		};
 		
+		/**
+		 * analized object type
+		 */
+		public function get contentAlias():String {
+			return content.value ? getQualifiedClassName(content.value) : "null";
+		};
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		// <---------------- INTERFACE FUNCTIONS
+		// <---------------- USELESS FOR ANALIZE OBJECT
+		
+		/**
+		 * interface function , useless here;
+		 */
+		public function get type():String {
+			return "Parent";
+		};
+		
+		/**
+		 * interface function , useless here;
+		 */
 		public function get contentType():int {
 			return 0;
 		};
 		
-		public function get contentAlias():String {
-			return content.value ? getQualifiedClassName(content.value) : "null";
-		}
-		
+		/**
+		 * interface function , useless here;
+		 */
 		public function get access():String {
 			return AnalizeType.READWRITE;
 		}
 		
+		/**
+		 * interface function , useless here;
+		 */
 		public function get analizeType():Class {
 			return Analize;
 		}
 		
-		public function get root():Analize {
-			return this;
-		}
-		
+		/**
+		 * interface function , useless here;
+		 */
 		public function get isDynamic():Boolean {
 			return false;
 		}
+		
+		/**
+		 * interface function , useless here;
+		 */
 		public function get isFinal():Boolean {
 			return false;
 		}
+		
+		/**
+		 * interface function , useless here;
+		 */
 		public function get isStatic():Boolean {
 			return false;
 		}
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		//<--------------------------- PARAMS
 		
+		/// Analize name
 		protected var _name:String;
+		/// content target
 		protected var content:LVar;
+		/// container proxy for create LVar
 		protected var container:Object;
+		/// Analized object informations
 		public var analize:IAnalize;
+		/// additional object for editor
+		public var debug:*;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		// <-------------------------- INIT
 		
+		/**
+		 * analize name
+		 * @param	name		name for indexing
+		 * @param	object		target object to analize
+		 */
 		public function Analize(name:String , object:*):void {
 			_name = name;
 			addAnalize(this);
@@ -252,17 +405,26 @@ package turbosqel.analizer{
 		
 		// <-------------------------- VALIDATION && CHANGES
 		
+		/**
+		 * dispatch information about single label change .
+		 */
 		public function invalidate():void {
 			dispatchEvent(new AnalizeEvent(AnalizeEvent.INVALIDATE));
 		};
 		
+		/**
+		 * dispatch information about IAnalizeParent object children Array change
+		 */
 		public function invalidateChildren():void {
 			parseChildren();
 			dispatchEvent(new AnalizeEvent(AnalizeEvent.INVALIDATE));
 		};
 		
 		
-		
+		/**
+		 * create new target object Analize
+		 * @return
+		 */
 		public function parseChildren():Array {
 			if (analize) {
 				analize.remove();
@@ -276,10 +438,15 @@ package turbosqel.analizer{
 		
 		// <-------------------------- TARGET
 		
+		/**
+		 * setting new analize target is not allowed , create new Analize
+		 */
 		public function set target(v:*):void {
-			content.value = v;
 		}
 		
+		/**
+		 * return Analize target object
+		 */
 		public function get target():* {
 			return content.value;
 		}
@@ -289,8 +456,14 @@ package turbosqel.analizer{
 		
 		// <-------------------------- REMOVE
 		
+		/**
+		 * remove analize , references and children children children ...
+		 */
 		public function remove():void {
 			removeAnalize(this);
+			debug = null;
+			content.remove();
+			content = null;
 			analize.remove();
 			analize = null;
 			target.remove();

@@ -4,12 +4,15 @@ package turbosqel.analizer
 	
 	public class AnalizeEvent extends Event{
 		
-		
+		/// infromation about tree changes
 		public static const INVALIDATE:String = "redrawTree";
 		
-		
-		public function AnalizeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false){
-			super(type, bubbles, cancelable);
+		/**
+		 * Analize Event
+		 * @param	type	event name
+		 */
+		public function AnalizeEvent(type:String){
+			super(type);
 		}
 	}
 }
