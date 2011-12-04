@@ -1,37 +1,52 @@
 //////////////////////////////////////////////////////
+
+
+Project goals :
+	Create quick , safe , usefull editor for creating data files for Action Script 3 projects .
+
+
+
+AMFEditor benefits :
+
+		quick - faster than XML , JSON , metadata
+
+		easy to use - easier than text editing , no syntax , no mismatch
+
+		extensible - simply add compiled SWF and create/load/save instances of compiled classes .
+
+		easy to load - 1 urlloader class load file and parse data direct to action script objects.
+
+
+//////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
 ///
 /// already added :
 ///
-/// AMFAnalizer:FlashDevelop project:
+
+
+/// AMFAnalizer:FlashDevelop flex project:
     -- code -- pure AS3
     --  ui  -- flex (only for tree display)
-    -- ! not describet and without examples yet ...
 
+/// quick load library : FlashDevelop as3 project
+    -- pure AS3 .swc lib , to load external files
+    -- with amf3 objects
 
 
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
 ///
-/// ill add soon :
+/// i'll add soon :
 
 
-//////////////////
-/// quick load library
-    -- pure AS3 .swc lib , to load external files
-    -- with amf3 objects
 
-
-//////////////////
-/// AMFEditor.
+/// AMFEditor
     -- flex & AIR amf editor
     --
     ---  full objects edit
     ---  file save/load
-    ---  file asscociatio
+    ---  file asscociation
     ---  easy to extend with new data types and parsers
-
-
 
 
 
