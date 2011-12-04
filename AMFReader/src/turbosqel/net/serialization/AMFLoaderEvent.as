@@ -1,0 +1,42 @@
+package turbosqel.net.serialization {
+	import flash.events.Event;
+	
+	/**
+	 * ...
+	 * @author Gerard Sławiński || turbosqel
+	 */
+	public class AMFLoaderEvent extends Event {
+		
+		///////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////
+		//
+		//<---------------- TYPES
+		
+		public static const RESULT:String = "dataParsed";
+		public static const ERROR:String = "dataError";
+		
+		
+		///////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////
+		//
+		//<---------------- EVENT :
+		
+		/// parsed data or error
+		public var data:*;
+		
+		/**
+		 * new amf loader event
+		 * @param	name		event type
+		 * @param	data		data connected with this event
+		 */
+		public function AMFLoaderEvent(name:String , data:*):void {
+			super(name);
+			this.data = data;
+		};
+		
+		///////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////
+		
+	}
+
+}
