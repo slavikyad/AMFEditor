@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2011-12-02'</value>
+      <value>'2011-12-13'</value>
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
@@ -28,7 +28,7 @@
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\src\Serial.mxml</path-element>
+    <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\src\SerialTest.mxml</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>

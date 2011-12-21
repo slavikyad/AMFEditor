@@ -17,6 +17,21 @@ package turbosqel.analizer{
 		function get analizeType():Class;
 		
 		/**
+		 * path from root object to this value
+		 */
+		function get path():String;
+		
+		/**
+		 * return parent analize object
+		 */
+		function get parent():IAnalizeParent;
+		
+		/**
+		 * is strong typed
+		 */
+		function get strong():Boolean;
+		function set strong(value:Boolean):void;
+		/**
 		 * access mode
 		 */
 		function get access():String;

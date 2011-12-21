@@ -1,5 +1,6 @@
 package turbosqel.net.serialization {
 	import flash.events.Event;
+
 	
 	/**
 	 * ...

@@ -1,5 +1,6 @@
 package turbosqel.analizer {
 	import avmplus.Describe;
+	
 	import turbosqel.data.LVar;
 	import turbosqel.utils.UArray;
 	import turbosqel.utils.UObject;
@@ -127,7 +128,9 @@ package turbosqel.analizer {
 				length =  subArray.length;
 				for (i = 0 ; i < length ; i++) {
 					paramInfo = subArray[i];
-					params.push(Analize.getType(this , new LVar(target , paramInfo.name ) , paramInfo.access , paramInfo.type));
+					var ian:IAnalize = Analize.getType(this , new LVar(target , paramInfo.name ) , paramInfo.access , paramInfo.type);
+					ian.strong = true;
+					params.push(ian);
 				};
 			}
 			// read functions :
@@ -137,6 +140,7 @@ package turbosqel.analizer {
 				for (i = 0; i < length ; i ++) {
 					paramInfo = subArray[i];
 					var funcType:FunctionType = Analize.getType(this , new LVar(target , paramInfo.name), null , Analize.FUNCTION) as FunctionType;
+					funcType.strong = true;
 					funcType.returnType = paramInfo.returnType;
 					/// take params object
 					funcType.params = subArray[i].parameters;

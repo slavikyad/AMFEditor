@@ -1,5 +1,6 @@
 package turbosqel.analizer {
 	import flash.utils.getQualifiedClassName;
+	
 	import turbosqel.data.LVar;
 	
 	/**
@@ -15,11 +16,13 @@ package turbosqel.analizer {
 		
 		// <-------------------------- PARAMS
 		
-		public var parent:IAnalizeParent;
+		
 		protected var content:LVar;
 		protected var paramAccess:String;
 		protected var paramType:String;
+		internal var isStrong:Boolean;
 		internal var _root:Analize;
+		internal var _parent:IAnalizeParent;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +30,7 @@ package turbosqel.analizer {
 		// <-------------------------- INIT
 		
 		public function ValueType(parent:IAnalizeParent , target:LVar , access:String = null , forceType:String = null):void {
-			this.parent = parent;
+			_parent = parent;
 			_root = parent.root;
 			content = target;
 			paramAccess = access || AnalizeType.READWRITE;
@@ -77,6 +80,21 @@ package turbosqel.analizer {
 		};
 		
 		/**
+		 * parent analize object
+		 */
+		public function get parent():IAnalizeParent {
+			return _parent;
+		}
+		
+		
+		public function set strong(val:Boolean):void {
+			isStrong = val;
+		}
+		public function get strong():Boolean {
+			return isStrong;
+		};
+		
+		/**
 		 * return label formated string
 		 */
 		public function get label():String {
@@ -98,12 +116,25 @@ package turbosqel.analizer {
 		};
 		
 		/**
-		 * 
+		 * analize class
 		 */
 		public function get analizeType():Class {
 			return this["constructor"];
 		};
 		
+		/**
+		 * path to value from root object
+		 */
+		public function get path():String {
+			var pr:IAnalize = parent;
+			var dig:String =  name;
+			while (pr != _root) {
+				dig = pr.name + "." + dig;
+				pr = pr.parent;
+			};
+			
+			return dig;
+		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +166,7 @@ package turbosqel.analizer {
 		 */
 		public function remove():void {
 			_root = null;
-			parent = null;
+			_parent = null;
 			content.remove();
 			content = null;
 		}

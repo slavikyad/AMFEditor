@@ -1,20 +1,18 @@
 package turbosqel.net.serialization {
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
-	import flash.net.URLLoader;
-	import flash.net.URLLoaderDataFormat;
-	import flash.net.URLRequest;
-	import flash.utils.ByteArray;
-	import flash.utils.setTimeout;
+		import flash.events.IOErrorEvent;
+		import flash.events.SecurityErrorEvent;
+		import flash.net.URLLoader;
+		import flash.net.URLLoaderDataFormat;
+		import flash.net.URLRequest;
+		import flash.utils.ByteArray;
+		import flash.utils.setTimeout;
 	
 	/**
 	 * ...
 	 * @author Gerard Sławiński || turbosqel
 	 */
-	 
-	public class AMFLoader extends URLLoader {
-		
+	public class SerialAMFLoader extends URLLoader {
 		
 		///////////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////
@@ -22,7 +20,7 @@ package turbosqel.net.serialization {
 		//<---------------- PARAMS
 		
 		/// loaded result :
-		public var result:*;
+		public var result:Serial;
 		
 		/// file url :
 		public var url:String;
@@ -35,14 +33,16 @@ package turbosqel.net.serialization {
 		 * create new loader/parser
 		 * @param	url		target file
 		 */
-		public function AMFLoader(url:String = null):void {
+		public function SerialAMFLoader(url:String = null):void {
 			addEventListener(Event.COMPLETE , complete);
 			addEventListener(IOErrorEvent.IO_ERROR , error);
 			addEventListener(SecurityErrorEvent.SECURITY_ERROR , error);
 			dataFormat = URLLoaderDataFormat.BINARY;
+			Serial.init();
+			
 			if (url) {
 				setTimeout(load , 0 , new URLRequest(url));
-			}
+			};
 		};
 		
 		///////////////////////////////////////////////////////////////////////////
@@ -101,6 +101,7 @@ package turbosqel.net.serialization {
 				bytes.uncompress();
 				bytes.position = 0;
 				result = bytes.readObject();
+				result.compressed(false);
 				////////////////////////////
 				dispatchEvent(new AMFLoaderEvent(AMFLoaderEvent.RESULT , result ));
 				
@@ -120,10 +121,12 @@ package turbosqel.net.serialization {
 				removeEventListener(Event.COMPLETE , complete);
 				removeEventListener(IOErrorEvent.IO_ERROR , error);
 				removeEventListener(SecurityErrorEvent.SECURITY_ERROR , error);
-			}
+			};
 			result = null;
-			
-		}
+		};
+		
+		///////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////
 		
 		
 	}

@@ -286,6 +286,23 @@ package turbosqel.analizer{
 		};
 		
 		/**
+		 * top object return null
+		 */
+		public function get parent():IAnalizeParent {
+			return null;
+		};
+		
+		public function get strong():Boolean {
+			return true;
+		};
+		public function set strong(val:Boolean):void {
+		}
+		
+		public function get path():String {
+			return "";
+		}
+		
+		/**
 		 * label getter . To create own labels check labelFunction param;
 		 */
 		public function get label():String {
@@ -299,6 +316,15 @@ package turbosqel.analizer{
 		public function get name():String {
 			return _name;
 		};
+		
+		public function set name(value:String):void {
+			var target:Object = container[_name];
+			delete container[_name];
+			_name = value;
+			container[_name] = target;
+			content.key = _name;
+			invalidate();
+		}
 		
 		/**
 		 * analized object type
@@ -361,6 +387,9 @@ package turbosqel.analizer{
 		public function get isStatic():Boolean {
 			return false;
 		}
+		
+		
+		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -464,9 +493,10 @@ package turbosqel.analizer{
 			debug = null;
 			content.remove();
 			content = null;
+			UObject.remove(container);
+			container = null;
 			analize.remove();
 			analize = null;
-			target.remove();
 			target = null;
 		}
 		
