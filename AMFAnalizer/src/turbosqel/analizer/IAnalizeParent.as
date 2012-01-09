@@ -12,6 +12,8 @@ package turbosqel.analizer {
 		 */
 		function parseChildren():Array;
 		
+		function get children():Array;
+		
 		
 		/**
 		 * create new label

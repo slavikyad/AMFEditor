@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2011-12-13'</value>
+      <value>'2012-01-06'</value>
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
@@ -25,6 +25,9 @@
     </source-path>
     <library-path append="true">
       <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\lib\as3SupportLib.swc</path-element>
+      <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\lib\MinimalComps_0_9_10.swc</path-element>
+      <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\lib\flexSupportLib.swc</path-element>
+      <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\lib\buttons.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>

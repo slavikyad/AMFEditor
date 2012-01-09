@@ -27,6 +27,11 @@ package turbosqel.analizer{
 		function get parent():IAnalizeParent;
 		
 		/**
+		 * value depth from root object
+		 */
+		function get depth():int;
+		
+		/**
 		 * is strong typed
 		 */
 		function get strong():Boolean;

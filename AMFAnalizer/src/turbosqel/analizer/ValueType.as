@@ -16,12 +16,17 @@ package turbosqel.analizer {
 		
 		// <-------------------------- PARAMS
 		
-		
+		/// lvar to target value
 		protected var content:LVar;
+		/// access mode
 		protected var paramAccess:String;
+		/// constructor name
 		protected var paramType:String;
+		/// strong typed
 		internal var isStrong:Boolean;
+		/// analize root
 		internal var _root:Analize;
+		/// this parent object
 		internal var _parent:IAnalizeParent;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +34,13 @@ package turbosqel.analizer {
 		
 		// <-------------------------- INIT
 		
+		/**
+		 * value base analize
+		 * @param	parent			parent analize object
+		 * @param	target			target value
+		 * @param	access			access mode
+		 * @param	forceType		force value type
+		 */
 		public function ValueType(parent:IAnalizeParent , target:LVar , access:String = null , forceType:String = null):void {
 			_parent = parent;
 			_root = parent.root;
@@ -80,16 +92,28 @@ package turbosqel.analizer {
 		};
 		
 		/**
+		 * depth from root object
+		 */
+		public function get depth():int {
+			return parent.depth + 1;
+		};
+		
+		/**
 		 * parent analize object
 		 */
 		public function get parent():IAnalizeParent {
 			return _parent;
 		}
 		
-		
+		/**
+		 * set strong typed value
+		 */
 		public function set strong(val:Boolean):void {
 			isStrong = val;
-		}
+		};
+		/**
+		 * is strong typed value
+		 */
 		public function get strong():Boolean {
 			return isStrong;
 		};
@@ -153,7 +177,7 @@ package turbosqel.analizer {
 		 * @return		info
 		 */
 		public function toString():String {
-			return "[ IAnalize:" + content.key + " , access :" + paramAccess + " ]" ;
+			return "[ IAnalize:" + content.key + " , access :" + paramAccess + ",type:"+type+" ]" ;
 		};
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////

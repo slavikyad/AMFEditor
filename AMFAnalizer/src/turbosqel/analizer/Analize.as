@@ -5,8 +5,6 @@ package turbosqel.analizer{
 	
 	import turbosqel.data.LVar;
 	import turbosqel.events.SoftEventDispatcher;
-	import turbosqel.utils.UArray;
-	import turbosqel.utils.UObject;
 
 	
 	
@@ -22,8 +20,10 @@ package turbosqel.analizer{
 	 * 
 	 * tree.dataProvider = an.analize;
 	 * 
-	 * 
+	 * and go !
 	 */
+	
+	 [Event(name="redrawTree", type="turbosqel.analizer.AnalizeEvent")]
 	
 	public class Analize extends SoftEventDispatcher implements IAnalizeParent {
 		
@@ -84,6 +84,8 @@ package turbosqel.analizer{
 		
 		/// show functions in list
 		public static var showFunctions:Boolean = true;
+		/// show display object container children
+		public static var showChildren:Boolean = true;
 		/// label string max length
 		public static var representLength:int = 100;
 		
@@ -95,6 +97,7 @@ package turbosqel.analizer{
 		
 		/// null value;
 		public static const NULL:String = "null";
+		public static const VOID:String = "void";
 		
 		/// simple nonexpandable types :
 		public static const STRING:String = "String";
@@ -110,7 +113,7 @@ package turbosqel.analizer{
 		public static const ARRAY:String = "Array";
 		
 		/// int code types 
-		internal static const VOID:int = 0;
+		internal static const NONE:int = 0;
 		internal static const DELEGATE:int = 1;
 		internal static const SIMPLE:int = 2;
 		internal static const DYNAMIC:int = 3;
@@ -130,20 +133,16 @@ package turbosqel.analizer{
 		 * @return						int code
 		 */
 		internal static function typeId(value:* , getClassName:Boolean = true):int {
-			
 			switch(getClassName ? getQualifiedClassName(value):String(value)) {
 				// null
 				case NULL:
-					return VOID;
+				case VOID:
+					return NONE;
 				// simple
 				case BOOLEAN :
-					return SIMPLE;
 				case STRING:
-					return SIMPLE;
 				case NUMBER:
-					return SIMPLE;
 				case INT:
-					return SIMPLE;
 				case UINT:
 					return SIMPLE;
 				// call
@@ -151,7 +150,6 @@ package turbosqel.analizer{
 					return DELEGATE;
 				// dynamic
 				case OBJECT :
-					return DYNAMIC;
 				case ARRAY :
 					return DYNAMIC;
 				// complex
@@ -167,7 +165,7 @@ package turbosqel.analizer{
 		 */
 		internal static function typeName(id:int):String {
 			switch(id) {
-				case NULL :
+				case NONE :
 					return "null";
 				case DELEGATE :
 					return "function";
@@ -192,7 +190,7 @@ package turbosqel.analizer{
 		 */
 		internal static function getType(parent:IAnalizeParent , target:LVar , access:String = null , forceType:String = null ):IAnalize {
 			switch(typeId((forceType ? forceType : target.value ), !Boolean(forceType) )) {
-				case VOID:
+				case NONE:
 					return new NullType(parent , target , access , forceType );
 				case DELEGATE :
 					return new FunctionType(parent , target , access , forceType);
@@ -251,12 +249,12 @@ package turbosqel.analizer{
 			} catch (e:Error) {
 				trace("Analize.makeLabel error " , e , e.getStackTrace());
 				represent = " cannot parse this value "
-			}
+			};
 			represent = represent.length > Analize.representLength ? represent.substr(0, Analize.representLength) : represent;
 			if (target.access == AnalizeType.WRITE) {
-				return target.name + "[" + target.type + "] ";
+				return (target.name != "null" ? target.name : "") + "[" + target.type + "] ";
 			}
-			return  target.name+ "[" + target.type + "] " +" = " + represent;
+			return  (target.name != "null" ? target.name : "") + "[" + target.type + "] " +" = " + represent;
 		};
 		
 		
@@ -283,6 +281,13 @@ package turbosqel.analizer{
 		 */
 		public function get root():Analize {
 			return this;
+		};
+		
+		/**
+		 * first of depth chain
+		 */
+		public function get depth():int {
+			return 0;
 		};
 		
 		/**
@@ -457,10 +462,14 @@ package turbosqel.analizer{
 		public function parseChildren():Array {
 			if (analize) {
 				analize.remove();
-			}
+			};
 			analize = getType(this , content);
-			return null;
-		}
+			return [analize];
+		};
+		
+		public function get children():Array {
+			return [analize];
+		};
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -471,14 +480,14 @@ package turbosqel.analizer{
 		 * setting new analize target is not allowed , create new Analize
 		 */
 		public function set target(v:*):void {
-		}
+		};
 		
 		/**
 		 * return Analize target object
 		 */
 		public function get target():* {
 			return content.value;
-		}
+		};
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -489,6 +498,7 @@ package turbosqel.analizer{
 		 * remove analize , references and children children children ...
 		 */
 		public function remove():void {
+			removeAllListeners();
 			removeAnalize(this);
 			debug = null;
 			content.remove();
@@ -498,8 +508,8 @@ package turbosqel.analizer{
 			analize.remove();
 			analize = null;
 			target = null;
-		}
+		};
 		
 		
-	}
-}
+	};
+};

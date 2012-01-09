@@ -1,7 +1,5 @@
 package turbosqel.analizer {
 	import turbosqel.data.LVar;
-	import turbosqel.utils.UArray;
-	import turbosqel.utils.UString;
 	
 	/**
 	 * ...

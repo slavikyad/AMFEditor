@@ -1,9 +1,12 @@
 package turbosqel.analizer {
 	import avmplus.Describe;
+	import avmplus.getQualifiedClassName;
 	
+	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
+	
+	import turbosqel.console.Console;
 	import turbosqel.data.LVar;
-	import turbosqel.utils.UArray;
-	import turbosqel.utils.UObject;
 	
 	
 	/**
@@ -20,8 +23,8 @@ package turbosqel.analizer {
 		 * target class type
 		 */
 		public override function get type():String {
-			return result ? result.name : paramType ;
-		}
+			return result ? result.name : (paramType ? paramType : (target ? getQualifiedClassName(target) : "null"));
+		};
 		
 		
 		/**
@@ -108,6 +111,12 @@ package turbosqel.analizer {
 				params.push(Analize.getType(this , new LVar(content.value , item)));
 			};
 			
+			// if display object :
+			if(Analize.showChildren && content.value is DisplayObjectContainer){
+				for(i = 0 ; i<content.value.numChildren ; i++){
+					params.push(Analize.getType(this , new LVar( content.value.getChildAt(i) ) , AnalizeType.READ ));
+				};
+			};
 			
 			// describe class
 			result = Describe.typeJSON(content.value);

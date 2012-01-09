@@ -1,12 +1,11 @@
 package turbosqel.analizer {
 	import turbosqel.data.LVar;
-	import turbosqel.utils.UArray;
 	
 	/**
 	 * ...
-	 * @author Gerard Sławiński
+	 * @author Gerard Sławiński || turbosqel
 	 */
-	public class DynamicType extends ValueType implements IAnalizeParent {
+	public class DynamicType extends ValueType implements IAnalizeParent , IAnalizeEdit {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,40 @@ package turbosqel.analizer {
 		public function DynamicType(parent:IAnalizeParent , target:LVar , access:String = "readwrite" , forceType:String = null):void {
 			super(parent , target, access, forceType);
 		};
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		// <-------------------------- EDIT FUNCTIONS
+		
+		
+		public function addParam(name:String , value:* = ""):IAnalize {
+			target[name] = value;
+			var newAnalize:IAnalize = Analize.getType(this , new LVar(target , name));
+			children.push(newAnalize);
+			root.invalidate();
+			return newAnalize;
+		};
+		
+		public function rename(newName:String):void {
+			var exist:IAnalize = UArray.searchValues(_parent.children , "name" , newName);
+			if (exist) {
+				exist.remove();
+				UArray.searchAndSlice(_parent.children , exist);
+			};
+			
+			content.target[newName] = content.value;
+			delete content.target[content.key];
+			content.key = newName;
+			
+			root.invalidate();
+		};
+		
+		public function deleteValue():void {
+			content.value = null;
+			UArray.searchAndSlice(_parent.children , this);
+			root.invalidate();
+			remove();
+		};
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
