@@ -7,7 +7,7 @@ h3. For now , i create lite version that You can see here : "amfeditor lite":htt
 .
 
 
-h3. Project goals : Create quick (as editing in notepad/txt editors) , dynamic (like XML , but faster and easier) , safe(no syntax errors) , usefull application for creating data files for Action Script 3 projects .
+h3. Project goals : Create quick (as editing in notepad/txt editors) , dynamic (like XML , but faster and easier) , safe(no syntax errors), usefull application for creating data files for Action Script 3 projects.
 
 
 .
@@ -32,23 +32,32 @@ h1. AMFEditor benefits :
 
 h2. AMFEditor elements :
 
+ * AMFEditor lite :
+FlashDevelop pure as3 project:
+** quick app for edit AMF3 simple values
+** "amfeditor lite":http://turbosqel.pl/amfeditor/
+
+ * AMFAnalizer : (added , in design development)
+FlashDevelop flex(only Tree used) project:
+** instance parser , that allow You check and edit as3 objects (pure AS3)
+** flex is used only for tree display
+
+ * AMFReader : (added , beta)
+FlashDevelop pure as3 project
+** pure AS3 .swc lib , to load external files with amf data
+** example inside
+
+
+.
+
+
+(under development)
 
  * AMFEditor : (not added yet , in final tests)
 Flex AIR application :
--- allow You to edit and create AMF instances
--- import and analize SWF
--- load additional classes from SWF's
--- manage files with data
--- associate with files , load by drag&drop
--- easy to extend with new data parsers (about this soon)
-
-
- * AMFAnalizer : (added , in design development)
-FlashDevelop flex project:
--- instance parser , that allow You check and edit as3 objects (pure AS3)
--- flex is used only for tree display
-
- * AMFReader : (added , beta)
-FlashDevelop as3 project
--- pure AS3 .swc lib , to load external files with amf data
--- example inside
+** allow You to edit and create AMF instances
+** import and analize SWF
+** load additional classes from SWF's
+** manage files with data
+** associate with files , load by drag&drop
+** easy to extend with new data parsers (about this soon)
