@@ -2,6 +2,11 @@ package turbosqel.analizer{
 	import turbosqel.data.LVar;
 	public interface IAnalize {
 		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		// <-------------------------- VALUE INFORMATIONS
+		
 		/**
 		 * get analize target
 		 */
@@ -10,11 +15,6 @@ package turbosqel.analizer{
 		 * set object to analize target and dispatch parseChildren on parent IAnalizeParent
 		 */
 		function set target(v:*):void;
-		
-		/**
-		 * Analize type class
-		 */
-		function get analizeType():Class;
 		
 		/**
 		 * path from root object to this value
@@ -27,35 +27,68 @@ package turbosqel.analizer{
 		function get parent():IAnalizeParent;
 		
 		/**
+		 * is strong typed
+		 */
+		function get strong():Boolean;
+		
+		/**
+		 * access mode
+		 */
+		function get access():String;
+		
+		/**
+		 * param name
+		 */
+		function get name():String;
+		
+		/**
+		 * target class name
+		 */
+		function get type():String;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		// <-------------------------- ANALIZE INFORMATIONS
+		
+		/**
+		 * Analize type class
+		 */
+		function get analizeType():Class;
+		
+		
+		/**
 		 * value depth from root object
 		 */
 		function get depth():int;
 		
 		/**
-		 * is strong typed
-		 */
-		function get strong():Boolean;
-		function set strong(value:Boolean):void;
-		/**
-		 * access mode
-		 */
-		function get access():String;
-		/**
 		 * return formated by Analize.makeLabel string;
 		 */
 		function get label():String;
-		/**
-		 * param name
-		 */
-		function get name():String;
-		/**
-		 * target class name
-		 */
-		function get type():String;
+		
 		/**
 		 * root Analize object
 		 */
 		function get root():Analize;
+		
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		// <-------------------------- OPERATIONS
+		
+		/**
+		 * rename (if param isnt dynamic) value key , override if something exist under new name
+		 * @param		newName		new param key
+		 */
+		function rename(newName:String):Boolean;
+		
+		/**
+		 * delete this target value and remove analize child
+		 */
+		function deleteValue():Boolean;
+		
 		/**
 		 * dispatch info about label change
 		 */

@@ -16,22 +16,17 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2012-01-06'</value>
+      <value>'2012-03-08'</value>
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\src</path-element>
+      <path-element>C:\Documents and Settings\G43\gits\AMFEditor\AMFAnalizer\src</path-element>
       <path-element>E:\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
-    <library-path append="true">
-      <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\lib\as3SupportLib.swc</path-element>
-      <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\lib\MinimalComps_0_9_10.swc</path-element>
-      <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\lib\flexSupportLib.swc</path-element>
-      <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\lib\buttons.swc</path-element>
-    </library-path>
+    <library-path append="true" />
   </compiler>
   <file-specs>
-    <path-element>C:\Documents and Settings\G43\AMFEditor\AMFAnalizer\src\SerialTest.mxml</path-element>
+    <path-element>C:\Documents and Settings\G43\gits\AMFEditor\AMFAnalizer\src\SerialTest.mxml</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>

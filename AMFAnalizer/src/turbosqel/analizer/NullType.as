@@ -16,9 +16,11 @@ package turbosqel.analizer
 		 */
 		public function NullType(parent:IAnalizeParent , target:LVar , access:String = "readwrite" , forceType:String = null ):void {
 			super(parent , target , access , "null");
-		}
+		};
 		
 		
-	}
+		
+		
+	};
 
-}
+};

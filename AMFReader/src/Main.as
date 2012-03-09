@@ -19,7 +19,7 @@ package {
 	 * @author Gerard Sławiński || turbosqel
 	 * ...
 	 * 
-	 * Test project for loading amf3 data from file .
+	 * Test project for loading amf3 and samf3 data from file .
 	 * 
 	 * 
 	 * 

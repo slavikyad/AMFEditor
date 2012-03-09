@@ -5,7 +5,6 @@ package turbosqel.analizer {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	
-	import turbosqel.console.Console;
 	import turbosqel.data.LVar;
 	
 	
@@ -31,19 +30,19 @@ package turbosqel.analizer {
 		 * target is dynamic
 		 */
 		public function get isDynamic():Boolean {
-			return result.isDynamic;
+			return result ? result.isDynamic : false;
 		};
 		/**
 		 * target is final
 		 */
 		public function get isFinal():Boolean {
-			return result.isFinal;
+			return result ? result.isFinal : false;
 		};
 		/**
 		 * target is static
 		 */
 		public function get isStatic():Boolean {
-			return result.isStatic;
+			return result ? result.isStatic : false;
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +60,7 @@ package turbosqel.analizer {
 		 */
 		public function ComplexType(parent:IAnalizeParent , target:LVar , access:String = "readwrite" , forceType:String = null):void{
 			super(parent , target, access, forceType);
-		}
+		};
 		
 		
 		
@@ -98,7 +97,7 @@ package turbosqel.analizer {
 				UArray.executeAndRemove(params , "remove");
 			};
 			/// check if target value is null
-			if (content.value == null) {
+			if (content.softValue == null) {
 				params = null;
 				return null;
 			};
@@ -113,8 +112,10 @@ package turbosqel.analizer {
 			
 			// if display object :
 			if(Analize.showChildren && content.value is DisplayObjectContainer){
-				for(i = 0 ; i<content.value.numChildren ; i++){
-					params.push(Analize.getType(this , new LVar( content.value.getChildAt(i) ) , AnalizeType.READ ));
+				for (i = 0 ; i < content.value.numChildren ; i++) {
+					var iads:IAnalize = Analize.getType(this , new LVar( content.value.getChildAt(i) ) , AnalizeType.READ );
+					iads["isStrong"] = true;
+					params.push(iads);
 				};
 			};
 			
@@ -128,7 +129,9 @@ package turbosqel.analizer {
 				var length:int =  subArray.length;
 				for (var i:int ; i < length ; i++) {
 					var paramInfo:Object = subArray[i];
-					params.push(Analize.getType(this , new LVar(target , paramInfo.name ) , paramInfo.access , paramInfo.type));
+					var ian:IAnalize = Analize.getType(this , new LVar(target , paramInfo.name ) , paramInfo.access , paramInfo.type);
+					ian["isStrong"] = true;
+					params.push(ian);
 				};
 			}
 			// read params:
@@ -137,8 +140,8 @@ package turbosqel.analizer {
 				length =  subArray.length;
 				for (i = 0 ; i < length ; i++) {
 					paramInfo = subArray[i];
-					var ian:IAnalize = Analize.getType(this , new LVar(target , paramInfo.name ) , paramInfo.access , paramInfo.type);
-					ian.strong = true;
+					ian = Analize.getType(this , new LVar(target , paramInfo.name ) , paramInfo.access , paramInfo.type);
+					ian["isStrong"] = true;
 					params.push(ian);
 				};
 			}
@@ -149,7 +152,7 @@ package turbosqel.analizer {
 				for (i = 0; i < length ; i ++) {
 					paramInfo = subArray[i];
 					var funcType:FunctionType = Analize.getType(this , new LVar(target , paramInfo.name), null , Analize.FUNCTION) as FunctionType;
-					funcType.strong = true;
+					funcType.isStrong= true;
 					funcType.returnType = paramInfo.returnType;
 					/// take params object
 					funcType.params = subArray[i].parameters;
@@ -174,6 +177,46 @@ package turbosqel.analizer {
 			root.invalidate();
 		};
 		
+		public function deleteParam(key:*):Boolean{
+			try{
+				delete target[key];
+			} catch (e:Error){
+				return false;
+			};
+			invalidateChildren();
+			return true;
+		};
+		
+		public function renameParam(from:*, to:*):Boolean{
+			try{
+				target[to] = target[from];
+				delete target[from];
+			} catch (e:Error){
+				return false;
+			};
+			invalidateChildren();
+			return true;
+		};
+		
+		/*
+		public function rename(newName:String):void {
+		var exist:IAnalize = UArray.searchValues(_parent.children , "name" , newName);
+		if (exist) {
+		exist.remove();
+		UArray.searchAndSlice(_parent.children , exist);
+		};
+		
+		content.target[newName] = content.value;
+		delete content.target[content.key];
+		content.key = newName;
+		
+		root.invalidate();
+		};
+		
+		public function deleteValue():void {
+		parent.deleteParam(name);
+		};
+		*/
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////

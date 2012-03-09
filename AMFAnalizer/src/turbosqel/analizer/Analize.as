@@ -98,7 +98,6 @@ package turbosqel.analizer{
 		/// null value;
 		public static const NULL:String = "null";
 		public static const VOID:String = "void";
-		
 		/// simple nonexpandable types :
 		public static const STRING:String = "String";
 		public static const BOOLEAN:String = "Boolean";
@@ -113,11 +112,10 @@ package turbosqel.analizer{
 		public static const ARRAY:String = "Array";
 		
 		/// int code types 
-		internal static const NONE:int = 0;
-		internal static const DELEGATE:int = 1;
-		internal static const SIMPLE:int = 2;
-		internal static const DYNAMIC:int = 3;
-		internal static const COMPLEX:int = 4;
+		internal static const DELEGATE:int = 0;
+		internal static const SIMPLE:int = 1;
+		internal static const DYNAMIC:int = 2;
+		internal static const COMPLEX:int = 3;
 		
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,8 +135,6 @@ package turbosqel.analizer{
 				// null
 				case NULL:
 				case VOID:
-					return NONE;
-				// simple
 				case BOOLEAN :
 				case STRING:
 				case NUMBER:
@@ -165,8 +161,8 @@ package turbosqel.analizer{
 		 */
 		internal static function typeName(id:int):String {
 			switch(id) {
-				case NONE :
-					return "null";
+				//case NONE :
+					//return "null";
 				case DELEGATE :
 					return "function";
 				case SIMPLE :
@@ -190,8 +186,8 @@ package turbosqel.analizer{
 		 */
 		internal static function getType(parent:IAnalizeParent , target:LVar , access:String = null , forceType:String = null ):IAnalize {
 			switch(typeId((forceType ? forceType : target.value ), !Boolean(forceType) )) {
-				case NONE:
-					return new NullType(parent , target , access , forceType );
+				//case NONE:
+					//return new NullType(parent , target , access , forceType );
 				case DELEGATE :
 					return new FunctionType(parent , target , access , forceType);
 				case SIMPLE:
@@ -370,7 +366,7 @@ package turbosqel.analizer{
 		 */
 		public function get analizeType():Class {
 			return Analize;
-		}
+		};
 		
 		/**
 		 * interface function , useless here;
@@ -415,6 +411,11 @@ package turbosqel.analizer{
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		// <-------------------------- INIT
 		
@@ -428,8 +429,8 @@ package turbosqel.analizer{
 			addAnalize(this);
 			////////////////////////////
 			container = new Object();
-			container[name] = object;
-			content = new LVar(container , name);
+			container[_name] = object;
+			content = new LVar(container , _name);
 			analize = getType(this , content);
 		};
 		
@@ -443,7 +444,7 @@ package turbosqel.analizer{
 		 * dispatch information about single label change .
 		 */
 		public function invalidate():void {
-			dispatchEvent(new AnalizeEvent(AnalizeEvent.INVALIDATE));
+			dispatchEvent(new AnalizeEvent(AnalizeEvent.INVALIDATE , this));
 		};
 		
 		/**
@@ -488,6 +489,11 @@ package turbosqel.analizer{
 		public function get target():* {
 			return content.value;
 		};
+		
+		public function deleteValue():Boolean{return false;};
+		public function rename(newName:String):Boolean{return false;};
+		public function deleteParam(key:*):Boolean{return false;};
+		public function renameParam(from:*, to:*):Boolean{return false;};
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////

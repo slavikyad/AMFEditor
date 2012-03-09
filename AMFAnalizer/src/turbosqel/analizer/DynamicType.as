@@ -5,7 +5,7 @@ package turbosqel.analizer {
 	 * ...
 	 * @author Gerard Sławiński || turbosqel
 	 */
-	public class DynamicType extends ValueType implements IAnalizeParent , IAnalizeEdit {
+	public class DynamicType extends ValueType implements IAnalizeParent {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,28 +59,6 @@ package turbosqel.analizer {
 			root.invalidate();
 			return newAnalize;
 		};
-		
-		public function rename(newName:String):void {
-			var exist:IAnalize = UArray.searchValues(_parent.children , "name" , newName);
-			if (exist) {
-				exist.remove();
-				UArray.searchAndSlice(_parent.children , exist);
-			};
-			
-			content.target[newName] = content.value;
-			delete content.target[content.key];
-			content.key = newName;
-			
-			root.invalidate();
-		};
-		
-		public function deleteValue():void {
-			content.value = null;
-			UArray.searchAndSlice(_parent.children , this);
-			root.invalidate();
-			remove();
-		};
-		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -105,7 +83,7 @@ package turbosqel.analizer {
 			if (params) {
 				UArray.executeAndRemove(params , "remove");
 			};
-			if (content.value == null) {
+			if (content.softValue == null) {
 				return params = null;
 			};
 			var arr:Array = new Array();
@@ -113,7 +91,7 @@ package turbosqel.analizer {
 				arr.push(Analize.getType(this , new LVar(content.value , item)));
 			};
 			return params = arr;
-		}
+		};
 		
 		/**
 		 *  create new children list and dispatch redraw event
@@ -121,6 +99,32 @@ package turbosqel.analizer {
 		public function invalidateChildren():void {
 			parseChildren();
 			root.invalidate();
+		};
+		
+		
+		public function deleteParam(key:*):Boolean {
+			try {
+				if (target is Array) {
+					(target as Array).splice(int(key) , 1);
+				}else {
+					delete target[key];
+				};
+			} catch (e:Error){
+				return false;
+			};
+			invalidateChildren();
+			return true;
+		};
+		
+		public function renameParam(from:*, to:*):Boolean{
+			try{
+				target[to] = target[from];
+				delete target[from];
+			} catch (e:Error){
+				return false;
+			};
+			invalidateChildren();
+			return true;
 		};
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,11 +139,11 @@ package turbosqel.analizer {
 			if (params) {
 				UArray.executeAndRemove(params , "remove");
 				params = null;
-			}
+			};
 			super.remove();
-		}
+		};
 		
 		
-	}
+	};
 
-}
+};

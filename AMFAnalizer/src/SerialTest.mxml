@@ -20,6 +20,7 @@
 		 */
 		
 		
+		import avmplus.Describe;
 		import flash.display.MovieClip;
 		import flash.events.Event;
 		import flash.events.MouseEvent;
@@ -27,47 +28,59 @@
 		import mx.controls.Tree;
 		import mx.events.ItemClickEvent;
 		import mx.events.ListEvent;
+		import spark.core.SpriteVisualElement;
 		import turbosqel.analizer.Analize;
 		import turbosqel.analizer.AnalizeEvent;
 		import turbosqel.analizerVisual.AnalizeTree;
 		import turbosqel.components.base.FlexDisplayObject;
 		import turbosqel.console.ConsoleWindow;
 		
-		
+		import flash.sampler.*;
 		
 		public function added(e:Event):void {
 			ConsoleWindow.run(stage);
 		};
 		
+		/// 
+		/// 
+		/// <------------- INIT
+		/// 
+		/// 
 		
 		public function fillTree(e:Event):void {
 			
-			var dic:Dictionary = new Dictionary();
-			dic[this] = 123;
-			dic[Tree] = "some string";
-			var analize:Analize = Analize.parse("t2" , {asd:123 , data:"viuhr" , obj2:{avm1:1 , avm2:2}, obj:{as2:123 , as3:124 , as4:125}});
+			/// create new analize
+			var analize:Analize = Analize.parse("test" ,  {asd:123 , data:"string" , obj2:["avm1" , "avm2"], obj:{as2:123 , as3:124 , as4:125}});
+			//this )//
+			//Describe.typeJSON(UFunction)
+			trace("s:",getSize(this));
 			
-			var analizeTree:FlexDisplayObject = new FlexDisplayObject();
-			addElement(analizeTree);
-			UObject.apply(analizeTree.addChild(new AnalizeTree()),{x:this.width /2 , width:this.width /2 , height:200 , analize:analize});
+			/// flex container
+			//var analizeTree:SpriteVisualElement = new ();
+			//addElement(analizeTree);
+			UObject.apply(as3tree.addChild(new AnalizeTree()),{x:this.width /2 , width:this.width /2 , height:400 , analize:analize});
 			
+			analize.addEventListener(AnalizeEvent.INVALIDATE , UFunction.delegateEvent(mxmltree.invalidateList));
+			mxmltree.dataProvider = analize.analize;
 			
-			//
-			analize.addEventListener(AnalizeEvent.INVALIDATE , UFunction.delegateEvent(objectDisplay.invalidateList));
-			objectDisplay.dataProvider = analize.analize//Analize.parse("test" , {tree:objectDisplay , func:fillTree  , dictionary:dic , mc:new MovieClip,  event:new MouseEvent("asd")} ).analize;
+			//var dic:Dictionary = new Dictionary();
+			//dic[this] = 123;
+			//dic[Tree] = "some string";
+			//Analize.parse("test" , {tree:objectDisplay , func:fillTree  , dictionary:dic , mc:new MovieClip,  event:new MouseEvent("asd")} ).analize;
 			//<base:FlexDisplayObject id="analizeTree" right="0" width="{this.width /2}" top="0" bottom="0" />
 			
 		};
 		
-		protected function clicked(e:ListEvent):void {
-			trace(e.target.selectedItem.path,e.target.selectedItem);
+		protected function clicked(e:ListEvent , app:* = null , ... argss):void {
+			trace(e.target.selectedItem.path, e.target.selectedItem);
+			trace(e.target.selectedItem.strong);
 		};
 		
 		]]>
 	
 	</fx:Script>
 	
-	
-	<mx:Tree id="objectDisplay" labelField="label" left="0" width="400" top="0" bottom="0" itemClick="clicked(event)" ></mx:Tree>
+	<s:SpriteVisualElement id="as3tree" />
+	<mx:Tree id="mxmltree" labelField="label" left="0" width="400" top="0" height="400" itemClick="clicked(event)" ></mx:Tree>
 	
 </s:Application>

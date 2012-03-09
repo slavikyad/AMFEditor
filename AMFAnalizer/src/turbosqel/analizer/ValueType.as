@@ -17,11 +17,11 @@ package turbosqel.analizer {
 		// <-------------------------- PARAMS
 		
 		/// lvar to target value
-		protected var content:LVar;
+		internal var content:LVar;
 		/// access mode
-		protected var paramAccess:String;
+		internal var paramAccess:String;
 		/// constructor name
-		protected var paramType:String;
+		internal var paramType:String;
 		/// strong typed
 		internal var isStrong:Boolean;
 		/// analize root
@@ -74,6 +74,8 @@ package turbosqel.analizer {
 			invalidate();
 		};
 		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		// <---------- INTERFACE GETTERS
 		
@@ -106,12 +108,6 @@ package turbosqel.analizer {
 		}
 		
 		/**
-		 * set strong typed value
-		 */
-		public function set strong(val:Boolean):void {
-			isStrong = val;
-		};
-		/**
 		 * is strong typed value
 		 */
 		public function get strong():Boolean {
@@ -129,7 +125,7 @@ package turbosqel.analizer {
 		 * parent key to target object / param name
 		 */
 		public function get name():String {
-			return String(content.key);
+			return String(content.key || content.target);
 		};
 		
 		/**
@@ -158,7 +154,7 @@ package turbosqel.analizer {
 			};
 			
 			return dig;
-		}
+		};
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +176,15 @@ package turbosqel.analizer {
 			return "[ IAnalize:" + content.key + " , access :" + paramAccess + ",type:"+type+" ]" ;
 		};
 		
+		public function deleteValue():Boolean {
+			return parent.deleteParam(name);
+		};
+		
+		public function rename(newName:String):Boolean{
+			return parent.renameParam(name , newName);
+		};
+		
+		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -191,9 +196,11 @@ package turbosqel.analizer {
 		public function remove():void {
 			_root = null;
 			_parent = null;
-			content.remove();
+			if(content){
+				content.remove();
+			};
 			content = null;
-		}
+		};
 		
 	}
 

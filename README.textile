@@ -1,0 +1,57 @@
+h1. AMF editor
+
+
+h3. For now , i create Lite version . Quick show You can see here : http://turbosqel.pl/amfeditor/
+
+
+
+h3. Project goals :
+	Create quick , safe , usefull editor for creating data files for Action Script 3 projects.
+
+
+	
+h3. Technical :
+	Editor - AIR , flex app compiled in flex 4.6 sdk
+	Extensions - SWF's files (can be pure as3) that implements app interfaces(info comming soon)
+
+
+
+h1. AMFEditor benefits :
+
+ * quick - faster than XML , JSON , metadata
+
+ * easy to use - easier than text editing , no syntax , no mismatch
+
+ * extensible - simply add compiled SWF and create/load/save instances of compiled classes .
+
+ * easy to load - 1 urlloader class load file and parse data direct to action script objects.
+
+
+
+
+
+
+
+
+h2. AMFEditor elements :
+
+
+ * AMFEditor : (not added yet , in final tests)
+Flex AIR application :
+-- allow You to edit and create AMF instances
+-- import and analize SWF
+-- load additional classes from SWF's
+-- manage files with data
+-- associate with files , load by drag&drop
+-- easy to extend with new data parsers (about this soon)
+
+
+ * AMFAnalizer : (added , in design development)
+FlashDevelop flex project:
+-- instance parser , that allow You check and edit as3 objects (pure AS3)
+-- flex is used only for tree display
+
+ * AMFReader : (added , beta)
+FlashDevelop as3 project
+-- pure AS3 .swc lib , to load external files with amf data
+-- example inside
