@@ -1,19 +1,16 @@
 h1. AMF editor
 
 
-h3. For now , i create Lite version . Quick show You can see here : http://turbosqel.pl/amfeditor/
+h3. For now , i create lite version that You can see here : "amfeditor lite":http://turbosqel.pl/amfeditor/
 
 
-
-h3. Project goals :
-	Create quick , safe , usefull editor for creating data files for Action Script 3 projects.
+.
 
 
-	
-h3. Technical :
-	Editor - AIR , flex app compiled in flex 4.6 sdk
-	Extensions - SWF's files (can be pure as3) that implements app interfaces(info comming soon)
+h3. Project goals : Create quick (as editing in notepad/txt editors) , dynamic (like XML , but faster and easier) , safe(no syntax errors) , usefull application for creating data files for Action Script 3 projects .
 
+
+.
 
 
 h1. AMFEditor benefits :
