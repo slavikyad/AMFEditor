@@ -120,6 +120,10 @@ package turbosqel.analizerVisual {
 		protected var slots:UArray = new UArray();
 		
 		internal function draw():void {
+			if (stage) {
+				this.width = stage.stageWidth;
+				this.height = stage.stageHeight;
+			}
 			for (var i:int ; i < slots.length ; i++ ) {
 				if (slots[i].invalidate()) {
 					slots[i].y = 25 * i;
