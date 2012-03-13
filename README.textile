@@ -2,6 +2,7 @@ h1. AMF editor
 
 
 h3. For now , i create lite version that You can see here : "amfeditor lite":http://turbosqel.pl/amfeditor/
+Or You can download AIR application from downloads section .
 
 
 .
