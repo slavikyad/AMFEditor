@@ -1,4 +1,4 @@
 *.bat
-AMFELite/bat
+AMFELite/bat/
 Thumbs.db
-*.p12
+AMFELite/cert.p12
